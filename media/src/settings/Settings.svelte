@@ -3,7 +3,7 @@
     import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
     import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
     import { drawAxes, drawGrid, labelAxes, freeChildren } from '../utils';
-    import { vMin, vMax, colorMap, densityColormap } from '../stores';
+    import { vMin, vMax, colorMap, densityColormap, keybinds } from '../stores';
     import WindowHeader from './WindowHeader.svelte';
     import { colorMapNames } from '../js-colormaps';
     import { offclick } from './offclick';
@@ -100,6 +100,7 @@
     };
 
     let showSettings = false;
+    let showKeybinds = false;
     let showUpload = false;
 
     const uploadScene = (e) => {
@@ -330,6 +331,36 @@
         </form>
     </div>
 {/if}
+{#if showKeybinds}
+    <div
+        class="settings-box"
+        class:grid={showKeybinds}
+        id="keybinds-box"
+        use:offclick
+        on:offclick={() => {
+            'caught offclick';
+            showKeybinds = false;
+        }}
+    >
+        <WindowHeader
+            title="Keybinds "
+            onClick={() => {
+                showKeybinds = false;
+                document.getElementById('keybinds').focus();
+            }}
+        />
+
+        <div class="row justify-content-between">
+            <div class="col-12">
+                <ul>
+                    {#each $keybinds as keybind}
+                    <li><b>{keybind.key}</b> &mdash; {keybind.description}</li>
+                    {/each}
+                </ul>
+            </div>
+        </div>
+    </div>
+{/if}
 
 <div class="settings-buttons" class:mobile={isMobileView}>
     <button
@@ -378,6 +409,16 @@
     </button>
     <button class="button" id="screenshot" title="Take screenshot">
         <i class="fa fa-camera" />
+    </button>
+    <button
+        class="button"
+        id="keybinds"
+        title="Show keybindings"
+        on:click={() => {
+            showKeybinds = !showKeybinds;
+        }}
+    >
+        <i class="fa fa-keyboard" />
     </button>
     {#if roomId}
         <a href="/" class="button" title="Exit room">

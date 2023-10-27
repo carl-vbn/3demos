@@ -29,7 +29,7 @@
     import { handlePollEvent } from './polls/utils';
 
     //import stores
-    import { tickTock } from './stores.js';
+    import { addKeybind, tickTock } from './stores.js';
 
     let isMobileView = false;
 
@@ -659,59 +659,114 @@
         render();
     };
 
+    const keybinds = {
+        'm': {
+            description: 'Toggle mobile view',
+            callback: () => {
+                isMobileView = !isMobileView;
+            },
+        },
+        'Escape': {
+            description: 'Clear selected objects',
+            callback: () => {
+                selectedObjects = [];
+                render();
+            },
+        },
+        '[': {
+            description: 'Select previous object',
+            callback: (e) => {
+                keySelect(e, true);
+            },
+        },
+        '{': {
+            description: 'Select previous object',
+            callback: (e) => {
+                keySelect(e, true);
+            },
+        },
+        ']': {
+            description: 'Select next object',
+            callback: (e) => {
+                keySelect(e, false);
+            },
+        },
+        '}': {
+            description: 'Select next object',
+            callback: (e) => {
+                keySelect(e, false);
+            },
+        },
+        '1': {
+            description: 'Focus on info panel',
+            callback: () => {
+                document.getElementById('info').focus();
+            },
+        },
+        '2': {
+            description: 'Focus on polls panel',
+            callback: () => {
+                if (currentMode === 'session' && isHost) {
+                    document.getElementById('polls').focus();
+                }
+            },
+        },
+        '3': {
+            description: 'Focus on objects panel',
+            callback: () => {
+                document.getElementById('objects').focus();
+            },
+        },
+        '4': {
+            description: 'Focus on settings panel',
+            callback: () => {
+                document.getElementById('settings').focus();
+            },
+        },
+        '5': {
+            description: 'Focus on encodeURL button',
+            callback: () => {
+                document.getElementById('encodeURL').focus();
+            },
+        },
+        '6': {
+            description: 'Focus on upload button',
+            callback: () => {
+                document.getElementById('upload').focus();
+            },
+        },
+        '7': {
+            description: 'Focus on download button',
+            callback: () => {
+                document.getElementById('download').focus();
+            },
+        },
+        '8': {
+            description: 'Focus on camera reset button',
+            callback: () => {
+                document.getElementById('cameraReset').focus();
+            },
+        },
+        '9': {
+            description: 'Focus on screenshot button',
+            callback: () => {
+                document.getElementById('screenshot').focus();
+            },
+        },
+    };
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let key in keybinds) {
+        addKeybind(key, keybinds[key].description);
+    }
+
     const keyDown = (e) => {
         if (e.target.matches('input')) {
             return;
         }
-        switch (e.key) {
-            case 'm':
-                isMobileView = !isMobileView;
-                break;
-            case 'Escape':
-                selectedObjects = [];
-                render();
-                break;
-            case '[':
-                keySelect(e, true);
-                break;
-            case '{':
-                keySelect(e, true);
-                break;
-            case ']':
-                keySelect(e, false);
-                break;
-            case '}':
-                keySelect(e, false);
-                break;
-            case '1':
-                document.getElementById('info').focus();
-                break;
-            case '2':
-                if (currentMode === 'session' && isHost) {
-                    document.getElementById('polls').focus();
-                }
-                break;
-            case '3':
-                document.getElementById('objects').focus();
-                break;
-            case '4':
-                document.getElementById('settings').focus();
-                break;
-            case '5':
-                document.getElementById('encodeURL').focus();
-                break;
-            case '6':
-                document.getElementById('upload').focus();
-                break;
-            case '7':
-                document.getElementById('download').focus();
-                break;
-            case '8':
-                document.getElementById('cameraReset').focus();
-                break;
-            case '9':
-                document.getElementById('screenshot').focus();
-                break;
+
+        if (keybinds[e.key]) {
+            keybinds[e.key].callback(e);
         }
     };
     window.addEventListener('keydown', keyDown, false);
@@ -852,10 +907,18 @@
         position: fixed;
         right: 0;
         z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
     }
 
     .settings-panel-box:not(.mobile) {
         bottom: 0;
+    }
+
+    .settings-panel-box.mobile {
+        flex-direction: row;
     }
 
     .demos-logo {
