@@ -343,7 +343,7 @@
         }}
     >
         <WindowHeader
-            title="Keybinds "
+            title="Key bindings"
             onClick={() => {
                 showKeybinds = false;
                 document.getElementById('keybinds').focus();
@@ -351,12 +351,15 @@
         />
 
         <div class="row justify-content-between">
-            <div class="col-12">
+            <div class="col-12 keybind-list">
+                {#each Object.entries($keybinds) as [kbGroup, keybinds]}
+                <h5>{kbGroup}</h5>
                 <ul>
-                    {#each $keybinds as keybind}
+                    {#each keybinds as keybind}
                     <li><b>{keybind.key}</b> &mdash; {keybind.description}</li>
                     {/each}
                 </ul>
+                {/each}
             </div>
         </div>
     </div>
@@ -460,6 +463,11 @@
         border: 1px solid black;
         background-color: rgb(0, 0, 0, 0.8);
         padding: 1rem;
+    }
+
+    .keybind-list {
+        max-height: 700px;
+        overflow-y: scroll;
     }
 
     .output {

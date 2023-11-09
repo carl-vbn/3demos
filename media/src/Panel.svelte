@@ -31,7 +31,7 @@
     import Solid from './objects/Solid.svelte';
 
     import { evaluate_cmap } from './js-colormaps';
-    import { colorMap, addKeybind } from './stores';
+    import { colorMap, registerKeybind } from './stores';
     import Story from './Story.svelte';
     import { tick } from 'svelte';
 
@@ -300,7 +300,7 @@
         resizeObserver.unobserve(panelEl);
     });
 
-    addKeybind('h', 'Toggle panel');
+    registerKeybind('h', 'Toggle panel');
     const onKeyDown = (e) => {
         if (e.key === 'h') {
             onTogglePanel();

@@ -1,5 +1,24 @@
 <script context="module">
     let titleIndex = 0;
+
+    const keybindDescriptions = {
+        'Shift': 'Move point on surface',
+        'c': 'Center camera on point',
+        't': 'Toggle point on surface',
+        'y': 'Toggle tangent plane',
+        'n': 'Toggle normal vector',
+        'i': 'Toggle integral',
+        'p': 'Toggle animation',
+        'l': 'Toggle level curves',
+        '0': 'Level elevation animation',
+        '>': 'Increase integral resolution',
+        '<': 'Decrease integral resolution'
+    }
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let [key, description] of Object.entries(keybindDescriptions)) {
+        registerKeybind(key, description, 'Function graph');
+    }
 </script>
 
 <script>
@@ -13,7 +32,7 @@
     import Nametag from './Nametag.svelte';
     import PlayButtons from '../form-components/PlayButtons.svelte';
     import { dependsOn } from './Vector.svelte';
-    import { tickTock } from '../stores';
+    import { registerKeybind, tickTock } from '../stores';
 
     const config = {};
     const math = create(all, config);

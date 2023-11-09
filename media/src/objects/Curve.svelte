@@ -1,5 +1,18 @@
 <script context="module">
     let titleIndex = 0;
+
+    const keybindDescriptions = {
+        'c': 'Center camera on object',
+        'o': 'Toggle osculating circle',
+        'p': 'Play/pause animation',
+        's': 'Toggle TNB frame',
+        't': 'Toggle frame'
+    }
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let [key, description] of Object.entries(keybindDescriptions)) {
+        registerKeybind(key, description, 'Curve');
+    }
 </script>
 
 <script>
@@ -23,7 +36,7 @@
     import { flashDance } from '../sceneUtils';
     import InputChecker from '../form-components/InputChecker.svelte';
 
-    import { tickTock, addKeybind } from '../stores';
+    import { tickTock, registerKeybind } from '../stores';
     import PlayButtons from '../form-components/PlayButtons.svelte';
 
     const config = {};
@@ -437,71 +450,49 @@
         render();
     };
 
-    const keybinds = {
-        'Backspace': {
-            description: 'Hide selected object',
-            callback: () => {
-                if (selectedObjects[0] === uuid) {
-                    toggleHide();
-                }
-            }
-        },
-        'c': {
-            description: 'Center camera on object',
-            callback: () => {
-                if (selectedObjects[selectedObjects.length - 1] === uuid) {
-                    controls.target.set(
-                        point.position.x,
-                        point.position.y,
-                        point.position.z
-                    );
-                }
-                render();
-            }
-        },
-        'o': {
-            description: 'Toggle osculating circle',
-            callback: () => {
-                osculatingCircle = !osculatingCircle;
-                render();
-            }
-        },
-        'p': {
-            description: 'Play/pause animation',
-            callback: () => {
-                animation = !animation;
-            }
-        },
-        's': {
-            description: 'Toggle TNB frame',
-            callback: () => {
-                TNB = !TNB;
-                render();
-            }
-        },
-        't': {
-            description: 'Toggle frame',
-            callback: () => {
-                if (uuid === selectedObjects[selectedObjects.length - 1]) {
-                    frame.visible = !frame.visible;
-                }
-                render();
-            }
-        }
-    };
-
-    // Add the keybindings to the store so that the settings panel can display them.
-    for (let key in keybinds) {
-        addKeybind(key, keybinds[key].description);
-        console.log('Adding keybind', key, keybinds[key].description);
-    }
-
     const onKeyDown = (e) => {
         if (e.target.matches('input')) {
             return;
         }
-        if (selected && keybinds[e.key]) {
-            keybinds[e.key].callback(e);
+
+        if (selected) {
+            switch (e.key) {
+                case 'Backspace':
+                    if (selectedObjects[0] === uuid) {
+                        toggleHide();
+                    }
+                    break;
+                case 'Shift':
+                    window.addEventListener('mousemove', onMouseMove, false);
+                    break;
+                case 'c':
+                    if (selectedObjects[selectedObjects.length - 1] === uuid) {
+                        controls.target.set(
+                            point.position.x,
+                            point.position.y,
+                            point.position.z
+                        );
+                    }
+                    render();
+                    break;
+                case 'o':
+                    osculatingCircle = !osculatingCircle;
+                    render();
+                    break;
+                case 'p':
+                    animation = !animation;
+                    break;
+                case 's':
+                    TNB = !TNB;
+                    render();
+                    break;
+                case 't':
+                    if (uuid === selectedObjects[selectedObjects.length - 1]) {
+                        frame.visible = !frame.visible;
+                    }
+                    render();
+                    break;
+            }
         }
     };
 

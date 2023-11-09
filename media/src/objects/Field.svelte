@@ -1,5 +1,17 @@
 <script context="module">
     let titleIndex = 0;
+
+    const keybindDescriptions = {
+        'c': 'Center camera on object',
+        't': 'Toggle trails',
+        'p': 'Play/pause animation',
+        'r': 'Rewind animation',
+    }
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let [key, description] of Object.entries(keybindDescriptions)) {
+        registerKeybind(key, description, 'Vector Field');
+    }
 </script>
 
 <script>
@@ -12,7 +24,7 @@
     import Nametag from './Nametag.svelte';
     import { ArrowBufferGeometry, rk4, norm1, checksum } from '../utils.js';
     import { flashDance } from '../sceneUtils';
-    import { tickTock } from '../stores';
+    import { registerKeybind, tickTock } from '../stores';
     // import ObjectParamInput from '../form-components/ObjectParamInput.svelte';
     import InputChecker from '../form-components/InputChecker.svelte';
     import PlayButtons from '../form-components/PlayButtons.svelte';

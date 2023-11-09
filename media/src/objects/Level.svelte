@@ -1,5 +1,18 @@
 <script context="module">
     let titleIndex = 0;
+
+    const keybindDescriptions = {
+        'Shift': 'Move point on the surface',
+        'c': 'Center camera on point',
+        't': 'Toggle tangent plane',
+        'y': 'Toggle tangent plane',
+        'n': 'Toggle normal vector',
+    };
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let [key, description] of Object.entries(keybindDescriptions)) {
+        registerKeybind(key, description, 'Level surface');
+    }
 </script>
 
 <script>
@@ -20,6 +33,7 @@
 
     import { marchingCubes, ArrowBufferGeometry, checksum } from '../utils.js';
     import { flashDance } from '../sceneUtils';
+    import { registerKeybind } from '../stores';
 
     export let uuid;
     export let onRenderObject = function () {};

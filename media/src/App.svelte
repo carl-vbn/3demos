@@ -29,7 +29,7 @@
     import { handlePollEvent } from './polls/utils';
 
     //import stores
-    import { addKeybind, tickTock } from './stores.js';
+    import { registerKeybind, tickTock } from './stores.js';
 
     let isMobileView = false;
 
@@ -781,8 +781,11 @@
 
     // Add the keybindings to the store so that the settings panel can display them.
     for (let key in keybinds) {
-        addKeybind(key, keybinds[key].description);
+        registerKeybind(key, keybinds[key].description);
     }
+
+    // This keybind is handled by every object
+    registerKeybind('Backspace', 'Hide selected object');
 
     const keyDown = (e) => {
         if (e.target.matches('input')) {

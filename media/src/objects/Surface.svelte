@@ -1,5 +1,19 @@
 <script context="module">
     let titleIndex = 0;
+
+    const keybindDescriptions = {
+        'Shift': 'Show tangent plane',
+        'c': 'Center camera on point',
+        't': 'Toggle tangent vectors',
+        'y': 'Toggle tangent plane',
+        'n': 'Toggle normal vector',
+        'p': 'Toggle animation',
+    };
+
+    // Add the keybindings to the store so that the settings panel can display them.
+    for (let [key, description] of Object.entries(keybindDescriptions)) {
+        registerKeybind(key, description, 'Parametric surface');
+    }
 </script>
 
 <script>
@@ -13,7 +27,7 @@
     import ObjHeader from './ObjHeader.svelte';
     import Nametag from './Nametag.svelte';
     import PlayButtons from '../form-components/PlayButtons.svelte';
-    import { densityColormap, tickTock, vMax, vMin } from '../stores';
+    import { densityColormap, registerKeybind, tickTock, vMax, vMin } from '../stores';
 
     const config = {};
     const math = create(all, config);

@@ -1,5 +1,7 @@
 <script context="module">
     let titleIndex = 0;
+
+    registerKeybind('d', 'Toggle density', 'Solid region');
 </script>
 
 <script>
@@ -11,7 +13,7 @@
     import M from '../M.svelte';
     import ObjHeader from './ObjHeader.svelte';
     // import PlayButtons from '../form-components/PlayButtons.svelte';
-    import { vMin, vMax, densityColormap } from '../stores';
+    import { vMin, vMax, densityColormap, registerKeybind } from '../stores';
 
     const config = {};
     const math = create(all, config);
